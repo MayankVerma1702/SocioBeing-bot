@@ -3,15 +3,11 @@ import { message } from "telegraf/filters";
 import User from "./src/models/User.js";
 import eventModel from "./src/models/Event.js"
 import connectdb from "./src/config/db.js"
-// import OpenAI from "openai";
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import 'dotenv/config'
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-// const openai = new OpenAI({
-//     apiKey: process.env['OPENAI_KEY']
-// })
 const gemini_api_key = process.env.GEMINI_KEY;
 const googleAI = new GoogleGenerativeAI(gemini_api_key);
 
@@ -20,7 +16,7 @@ const model = googleAI.getGenerativeModel({ model: process.env.AI_MODEL });
 
 
 try {
-    await connectdb()
+    await connectdb().then(console.log("Database Connected"))
 } catch (error) {
     console.log(error)
     process.kill(process.pid, 'SIGTERM')
@@ -29,6 +25,7 @@ try {
 bot.start(async (ctx) =>{
 
     const from = ctx.update.message.from
+    console.log("started")
 
     try {
         await User.findOneAndUpdate( {tgId: from.id}, {
@@ -83,29 +80,6 @@ bot.command('generate', async(ctx) => {
         ctx.reply("No event for the day...")
         return 
     }
-
-    // console.log("events", events)
-
-    // Openai calls
-
-    // try {
-    //     const chatCompletion = await openai.chat.completions.create({
-    //         messages: [
-    //             {
-    //                 role: 'system',
-    //                 content: 
-    //                 'Act as a senior copywriter, you write highly engaging posts for linkedIn, Facebook and Twitter using provided thoughts/events throughout the day.',
-
-    //             },
-    //             {
-    //                 role: 'user',
-    //                 content:
-    //                 `Write like a human, for humans. Craft three engaging social media posts tailored for linkedIn, Facebook, and Twitter audiences. Use simple language. Use given time labels just to understand the order of the event, don't mention the time in thee posts. Each post should creatively highlight the following events. Ensure the tone is conversational and impactful. Focus on engaging the respective platform's audience, encouraging interaction, and driving interest in the events:
-    //                 ${events.map((event)=> events.text).join(',')}`,
-    //             }
-    //         ],
-    //         model: process.env.OPENAI_MODEL,
-    //     })
 
    
             
