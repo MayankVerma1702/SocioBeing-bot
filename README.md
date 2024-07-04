@@ -49,7 +49,7 @@ To install and set up the SocioBeing_bot, follow these steps:
 
 5. **Run the bot**:
    ```bash
-   node bot.js
+   node server.js
    ```
 
 ## Usage
