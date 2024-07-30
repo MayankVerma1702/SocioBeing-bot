@@ -25,7 +25,7 @@ try {
 bot.start(async (ctx) =>{
 
     const from = ctx.update.message.from
-    console.log("started")
+    // console.log("started")
 
     try {
         await User.findOneAndUpdate( {tgId: from.id}, {
